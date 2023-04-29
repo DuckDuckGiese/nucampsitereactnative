@@ -5,6 +5,8 @@ import Constants from "expo-constants";
 import { createStackNavigator } from "@react-navigation/stack";
 import HomeScreen from "./HomeScreen";
 import { createDrawerNavigator } from "@react-navigation/drawer";
+import AboutScreen from "./AboutScreen";
+import ContactScreen from "./ContactScreen";
 
 const Drawer = createDrawerNavigator();
 
@@ -22,6 +24,34 @@ const HomeNavigator = () => {
                 name='home'
                 component={HomeScreen}
                 options={{ title: 'home'}}
+            />
+        </Stack.Navigator>
+    )
+}
+
+const AboutNavigator = () => {
+    const Stack = createStackNavigator();
+    
+    return(
+        <Stack.Navigator screenOptions={screenOptions}>
+            <Stack.Screen 
+                name='About'
+                component={AboutScreen}
+                options={{ title: 'About'}}
+            />
+        </Stack.Navigator>
+    )
+}
+
+const ContactNavigator = () => {
+    const Stack = createStackNavigator();
+    
+    return(
+        <Stack.Navigator screenOptions={screenOptions}>
+            <Stack.Screen 
+                name='contact'
+                component={ContactScreen}
+                options={{ title: 'Contact'}}
             />
         </Stack.Navigator>
     )
@@ -72,6 +102,16 @@ const Main = () => {
                     name='Directory'
                     component={DirectoryNavigator}
                     options={{ title: 'Directory' }}
+                />
+                <Drawer.Screen
+                    name='About'
+                    component={AboutNavigator}
+                    options={{ title: 'About' }}
+                />
+                <Drawer.Screen
+                    name='Contact'
+                    component={ContactNavigator}
+                    options={{ title: 'Contact' }}
                 />
             </Drawer.Navigator>
         </View>
