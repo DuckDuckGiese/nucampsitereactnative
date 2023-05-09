@@ -5,12 +5,11 @@ import { baseUrl } from '../shared/baseUrl';
 import Loading from '../components/LoadingComponent';
 
 const FeaturedItem = (props) => {
-    const {item} = props;
+    const { item } = props;
 
     if (props.isLoading) {
         return <Loading />;
     }
-
     if (props.errMess) {
         return (
             <View>
@@ -18,7 +17,6 @@ const FeaturedItem = (props) => {
             </View>
         );
     }
-
     if (item) {
         return (
             <Card containerStyle={{ padding: 0 }}>
@@ -49,10 +47,10 @@ const HomeScreen = () => {
 
     const featCampsite = campsites.campsitesArray.find((item) => item.featured);
     const featPromotion = promotions.promotionsArray.find(
-    (item) => item.featured
+        (item) => item.featured
     );
     const featPartner = partners.partnersArray.find((item) => item.featured);
-    
+
     return (
         <ScrollView>
             <FeaturedItem
