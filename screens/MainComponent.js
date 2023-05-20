@@ -237,34 +237,41 @@ const Main = () => {
         dispatch(fetchPromotions());
         dispatch(fetchPartners());
         dispatch(fetchComments());
+        
+        showNetInfo();
     }, [dispatch]);
 
-    useEffect(() => {
-        NetInfo.fetch().then((connectionInfo) => {
-            Platform.OS === 'ios'
-                ? Alert.alert(
-                      'Initial Network Connectivity Type:',
-                      connectionInfo.type
-                  )
-                : ToastAndroid.show(
-                      'Initial Network Connectivity Type: ' +
-                          connectionInfo.type,
-                      ToastAndroid.LONG
-                  );
-        });
-
-        const unsubscribeNetInfo = NetInfo.addEventListener(
-            (connectionInfo) => {
-                handleConnectivityChange(connectionInfo);
+    const showNetInfo = async () => {
+        try {
+            const connectionInfo = await NetInfo.fetch();
+            
+            if (Platform.OS === 'ios') {
+                Alert.alert(
+                'Initial Network Connectivity Type:',
+                connectionInfo.type
+                );
+            } else {
+                ToastAndroid.show(
+                'Initial Network Connectivity Type: ' + connectionInfo.type,
+                ToastAndroid.LONG
+                );
             }
-        );
-
-        return unsubscribeNetInfo;
-    }, []);
-
-    const handleConnectivityChange = (connectionInfo) => {
-        let connectionMsg = 'You are now connected to an active network.';
-        switch (connectionInfo.type) {
+        
+            const unsubscribeNetInfo = NetInfo.addEventListener(
+                (connectionInfo) => {
+                handleConnectivityChange(connectionInfo);
+                }
+            );
+        
+            return unsubscribeNetInfo;
+            } catch (error) {
+            console.error('Error fetching network information:', error);
+            }
+        };
+        
+        const handleConnectivityChange = (connectionInfo) => {
+            let connectionMsg = 'You are now connected to an active network.';
+            switch (connectionInfo.type) {
             case 'none':
                 connectionMsg = 'No network connection is active.';
                 break;
@@ -277,12 +284,20 @@ const Main = () => {
             case 'wifi':
                 connectionMsg = 'You are now connected to a WiFi network.';
                 break;
-        }
-        Platform.OS === 'ios'
-            ? Alert.alert('Connection change:', connectionMsg)
-            : ToastAndroid.show(connectionMsg, ToastAndroid.LONG);
-    };
-
+            }
+            if (Platform.OS === 'ios') {
+            Alert.alert('Connection change:', connectionMsg);
+            } else {
+            ToastAndroid.show(connectionMsg, ToastAndroid.LONG);
+            }
+        };
+        
+        const unsubscribeNetInfo = NetInfo.addEventListener(
+            (connectionInfo) => {
+                handleConnectivityChange(connectionInfo);
+            }
+        );
+    
     return (
         <View
             style={{
